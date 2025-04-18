@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>24-Hour Countdown with Editable To-Do List</title>
+  <title>Time budget</title>
   <style>
     * {
       box-sizing: border-box;
@@ -19,7 +18,6 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
     }
 
     .container {
@@ -29,7 +27,7 @@
       align-items: center;
       justify-content: center;
       width: 90%;
-      max-width: 700px;
+      max-width: 800px;
       padding: 20px;
     }
 
@@ -98,72 +96,6 @@
       opacity: 1;
     }
 
-    /* To-Do List Neon Style */
-    .todo-list {
-      list-style-type: none;
-      padding: 0;
-      margin-top: 20px;
-      max-width: 90%;
-    }
-
-    .todo-list li {
-      margin-bottom: 10px;
-      color: #fff;
-      font-size: 1.5vw;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      background: #1a1a2e;
-      border-radius: 10px;
-      padding: 10px;
-      box-shadow: 0 0 10px #00ffe0;
-      transition: all 0.3s ease;
-    }
-
-    .todo-list li:hover {
-      box-shadow: 0 0 15px #00ffe0;
-      background-color: #333;
-    }
-
-    .todo-list input[type="checkbox"] {
-      margin-right: 10px;
-      accent-color: #00ffe0;
-    }
-
-    .todo-list button {
-      background: none;
-      color: #ffcc00;
-      border: 2px solid #ffcc00;
-      font-size: 1.4vw;
-      margin-left: 10px;
-      padding: 5px 10px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .todo-list button:hover {
-      background-color: #ffcc00;
-      color: #1a1a2e;
-      box-shadow: 0 0 10px #ffcc00;
-    }
-
-    .todo-list input[type="text"] {
-      background: none;
-      border: 2px solid #00ffe0;
-      color: #fff;
-      padding: 5px;
-      width: 70%;
-      margin-left: 10px;
-      font-size: 1.5vw;
-      transition: all 0.3s ease;
-    }
-
-    .todo-list input[type="text"]:focus {
-      border-color: #ffcc00;
-      outline: none;
-      box-shadow: 0 0 10px #ffcc00;
-    }
-
     /* Larger scaling for smaller screens */
     @media (max-width: 600px) {
       h1 {
@@ -181,12 +113,6 @@
       .bar-container {
         height: 8vh;
       }
-      .todo-list li {
-        font-size: 4vw;
-      }
-      .todo-list input[type="text"] {
-        width: 60%;
-      }
     }
   </style>
 </head>
@@ -201,74 +127,15 @@
     </div>
     <div class="time-label" id="timeLabel">Calculating...</div>
     <div class="reset-message" id="resetMessage">🎉 A brand new day has begun! Reset and refocus.</div>
-
   </div>
 
   <script>
     const barFill = document.getElementById("barFill");
     const timeLabel = document.getElementById("timeLabel");
     const resetMessage = document.getElementById("resetMessage");
-    const todoListElement = document.getElementById("todoList");
-    const newTaskInput = document.getElementById("newTask");
 
     const SECONDS_IN_DAY = 24 * 60 * 60;
-    const LOCAL_STORAGE_KEY = 'todoList';
 
-    // Load tasks from localStorage
-    function loadTasks() {
-      const tasks = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
-      todoListElement.innerHTML = '';
-      tasks.forEach((task, index) => {
-        createTaskElement(task, index);
-      });
-    }
-
-    // Create a new task element
-    function createTaskElement(task, index) {
-      const li = document.createElement("li");
-      li.classList.add("task");
-      li.innerHTML = `
-        <input type="checkbox" id="task${index}" ${task.completed ? "checked" : ""} onclick="toggleTask(${index})">
-        <input type="text" value="${task.name}" onblur="updateTask(${index}, this.value)" />
-        <button onclick="removeTask(${index})">Remove</button>
-      `;
-      todoListElement.appendChild(li);
-    }
-
-    // Add a new task
-    function addTask() {
-      const taskName = newTaskInput.value.trim();
-      if (taskName === "") return;
-      const tasks = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
-      tasks.push({ name: taskName, completed: false });
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(tasks));
-      loadTasks();
-      newTaskInput.value = "";
-    }
-
-    // Toggle task completion
-    function toggleTask(index) {
-      const tasks = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-      tasks[index].completed = !tasks[index].completed;
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(tasks));
-    }
-
-    // Update task name
-    function updateTask(index, newName) {
-      const tasks = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-      tasks[index].name = newName;
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(tasks));
-    }
-
-    // Remove task
-    function removeTask(index) {
-      const tasks = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-      tasks.splice(index, 1);
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(tasks));
-      loadTasks();
-    }
-
-    // Update UI every second
     function updateUI() {
       const now = new Date();
       const currentSeconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
@@ -292,7 +159,6 @@
     }
 
     updateUI();
-    loadTasks();
     setInterval(updateUI, 1000);
   </script>
 </body>
